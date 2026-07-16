@@ -12,7 +12,7 @@ const steps = [
     step: "01",
     title: "Screen",
     subtitle: "Find the right candidates instantly",
-    desc: "Resume screening with Aptahire AI validates every applicant against JD matching, skill validation, and cheat detection — no manual CV sorting.",
+    desc: "Resume screening with Aptahire AI validates every applicant against JD matching, skill validation, and cheat detection - no manual CV sorting.",
     image: searchDashboard,
     icon: "fa-solid fa-magnifying-glass",
   },

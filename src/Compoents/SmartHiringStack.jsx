@@ -71,9 +71,9 @@ const steps = [
   },
 ];
 
-/* Desktop: wavy path through icon centers — no loose dots */
+/* Desktop: wavy path through icon centers - no loose dots */
 function StackPathDesktop() {
-  // 7 equal columns in viewBox 980 — centers aligned with grid
+  // 7 equal columns in viewBox 980 - centers aligned with grid
   const xs = [70, 210, 350, 490, 630, 770, 910];
   // same center Y so the line meets every icon the same way
   const y = 40;
@@ -113,7 +113,7 @@ function StackPathDesktop() {
   );
 }
 
-/* Tablet / mobile: vertical wavy connector — clipped to steps only */
+/* Tablet / mobile: vertical wavy connector - clipped to steps only */
 function StackPathVertical() {
   return (
     <svg

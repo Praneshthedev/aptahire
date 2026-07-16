@@ -93,7 +93,7 @@ function AnimatedCell({ row, which, start, delay, className }) {
     decimals,
   });
 
-  // display delayed start via CSS opacity until parent triggers — actual count starts with `start`
+  // display delayed start via CSS opacity until parent triggers - actual count starts with `start`
   const display =
     decimals > 0 && typeof count === "number"
       ? formatValue(Number(count), row, which)

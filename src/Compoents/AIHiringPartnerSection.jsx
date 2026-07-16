@@ -1,6 +1,7 @@
 import React from "react";
 import ProgressLoad from "./ProgressLoad";
 import UrgencyLine from "./UrgencyLine";
+import FireGif from "./FireGif";
 
 const AIHiringPartnerSection = () => {
   return (
@@ -108,12 +109,7 @@ const AIHiringPartnerSection = () => {
 
   {/* Top Info */}
   <p className="sm:text-base text-xs text-black flex items-center gap-2 font-medium">
-    <img
-      src="/image/fire.gif"
-      alt=""
-      className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 object-contain"
-      aria-hidden="true"
-    />
+    <FireGif className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
     <span>Agencies ahead of you deployed this already.</span>
   </p>
 

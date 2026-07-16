@@ -23,15 +23,15 @@ const WarningIcon = ({ className = "h-4 w-4" }) => (
 const Header = () => {
   return (
     <div
-      className="w-full bg-[#c62828] text-white text-center
+      className="w-full bg-[#ffeb3c] text-black text-center
         py-2 px-3 sm:px-4
         text-xs sm:text-sm md:text-[15px] font-medium"
       role="status"
     >
       <div className="inline-flex items-center justify-center gap-2 max-w-5xl mx-auto">
-        <WarningIcon className="header-warning-icon h-[15px] w-[15px] sm:h-4 sm:w-4 shrink-0 text-white" />
+        <WarningIcon className="header-warning-icon h-[15px] w-[15px] sm:h-4 sm:w-4 shrink-0 text-black" />
         <p className="leading-snug">
-          Only 7 Free Workflow Review Spots Left — Agencies Are Claiming Them Fast.
+          Only 7 Free Workflow Review Spots Left - Agencies Are Claiming Them Fast.
         </p>
       </div>
     </div>

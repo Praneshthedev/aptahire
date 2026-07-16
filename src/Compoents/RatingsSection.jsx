@@ -4,6 +4,7 @@
  */
 import ProgressLoad from "./ProgressLoad";
 import UrgencyLine from "./UrgencyLine";
+import FireGif from "./FireGif";
 import profile1 from "../assets/profile1.png";
 import profile2 from "../assets/profile2.webp";
 import profile3 from "../assets/megha.png";
@@ -194,12 +195,7 @@ export default function RatingsSection() {
 
   {/* Live Activity */}
   <p className="text-black font-semibold text-xs sm:text-base flex items-center gap-2 justify-center">
-    <img
-      src="/image/fire.gif"
-      alt=""
-      className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 object-contain"
-      aria-hidden="true"
-    />
+    <FireGif className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
     <span>3 agencies booked while you read this page.</span>
   </p>
 

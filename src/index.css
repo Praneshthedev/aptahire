@@ -68,3 +68,42 @@ button {
 .urgency-icon {
   animation: urgency-icon-glow 1.6s ease-in-out infinite;
 }
+
+@keyframes fire-flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1) translateY(0); }
+  25% { transform: scaleY(1.06) scaleX(0.96) translateY(-1px); }
+  50% { transform: scaleY(0.96) scaleX(1.04) translateY(0); }
+  75% { transform: scaleY(1.04) scaleX(0.98) translateY(-0.5px); }
+}
+
+@keyframes fire-spark {
+  0%, 100% { opacity: 0.9; transform: translateY(0) scale(1); }
+  50% { opacity: 0.35; transform: translateY(-4px) scale(0.7); }
+}
+
+.fire-flame {
+  display: inline-block;
+  overflow: visible;
+}
+
+.fire-layer {
+  transform-origin: 32px 58px;
+  animation: fire-flicker 0.55s ease-in-out infinite;
+}
+
+.fire-mid {
+  animation-duration: 0.45s;
+  animation-delay: -0.1s;
+}
+
+.fire-core {
+  animation-duration: 0.35s;
+  animation-delay: -0.2s;
+}
+
+.fire-spark {
+  animation: fire-spark 0.7s ease-in-out infinite;
+}
+
+.fire-spark.s2 { animation-delay: -0.2s; }
+.fire-spark.s3 { animation-delay: -0.4s; }
