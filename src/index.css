@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('../public/Fonts/Poppins-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-Regular';
+  src: url('../public/Fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Poppins' !important;
+}
+
+p {
+  font-family: 'Poppins-Regular' !important;
+}
+
+button {
+  font-family: 'Poppins' !important;
+}
+
+@keyframes float-left-right {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); } /* change 10px to control movement */
+}
+
+@keyframes float-right-left {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-10px); }
+}
+
+.animate-left-right {
+  animation: float-left-right 3s ease-in-out infinite;
+}
+
+.animate-right-left {
+  animation: float-right-left 3s ease-in-out infinite;
+}
