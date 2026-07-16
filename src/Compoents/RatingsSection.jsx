@@ -3,6 +3,7 @@
  * Displays review platform ratings and customer quotes
  */
 import ProgressLoad from "./ProgressLoad";
+import UrgencyLine from "./UrgencyLine";
 import profile1 from "../assets/profile1.png";
 import profile2 from "../assets/profile2.webp";
 import profile3 from "../assets/megha.png";
@@ -192,20 +193,21 @@ export default function RatingsSection() {
   </button>
 
   {/* Live Activity */}
-  <p className="text-black font-semibold text-xs sm:text-base flex items-center gap-0">
-    <span className="">👀</span>
+  <p className="text-black font-semibold text-xs sm:text-base flex items-center gap-2 justify-center">
+    <img
+      src="/image/fire.gif"
+      alt=""
+      className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 object-contain"
+      aria-hidden="true"
+    />
     <span>3 agencies booked while you read this page.</span>
   </p>
 
-  {/* Progress */}
   <div className="w-full max-w-xs">
     <ProgressLoad />
   </div>
 
-  {/* Urgency */}
-  <p className="text-red-600 font-semibold tracking-wide ">
-    🚨 HURRY! Only 7 slots left this week.
-  </p>
+  <UrgencyLine />
 
 </div>
       </div>

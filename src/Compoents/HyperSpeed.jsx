@@ -35,7 +35,7 @@ export default function HyperSpeed() {
       reset() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.radius = Math.random() * 4 + 3;   // 🔥 BIGGER balls
+        this.radius = Math.random() * 4 + 3;   // bigger balls
         this.speed = Math.random() * 1.2 + 0.4;
         this.alpha = Math.random() * 0.5 + 0.35;
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];

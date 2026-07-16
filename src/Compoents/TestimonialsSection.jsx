@@ -32,6 +32,46 @@ const testimonials = [
   },
 ];
 
+const STAR_COUNT = 5;
+const STAR_STEP_MS = 130; // fast fill 1 → 5
+const HOLD_AFTER_STARS_MS = 2600; // read time before next review
+
+function AnimatedStars({ resetKey, animate }) {
+  const [lit, setLit] = useState(animate ? 0 : STAR_COUNT);
+
+  useEffect(() => {
+    if (!animate) {
+      setLit(STAR_COUNT);
+      return;
+    }
+
+    setLit(0);
+    let n = 0;
+    const id = setInterval(() => {
+      n += 1;
+      setLit(n);
+      if (n >= STAR_COUNT) clearInterval(id);
+    }, STAR_STEP_MS);
+
+    return () => clearInterval(id);
+  }, [resetKey, animate]);
+
+  return (
+    <div className="flex gap-1 mt-4" aria-label={`${lit} out of ${STAR_COUNT} stars`}>
+      {[...Array(STAR_COUNT)].map((_, i) => (
+        <i
+          key={i}
+          className={`fa-solid fa-star text-sm transition-all duration-150 ${
+            i < lit
+              ? "text-yellow-400 scale-110"
+              : "text-slate-200 scale-100"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function AutoSlidingTestimonials() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -39,12 +79,15 @@ export default function AutoSlidingTestimonials() {
   useEffect(() => {
     if (paused) return;
 
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % testimonials.length);
-    }, 3500);
+    const total =
+      STAR_COUNT * STAR_STEP_MS + HOLD_AFTER_STARS_MS;
 
-    return () => clearInterval(timer);
-  }, [paused]);
+    const timer = setTimeout(() => {
+      setIndex((prev) => (prev + 1) % testimonials.length);
+    }, total);
+
+    return () => clearTimeout(timer);
+  }, [index, paused]);
 
   const getCard = (offset) =>
     testimonials[(index + offset + testimonials.length) % testimonials.length];
@@ -56,46 +99,48 @@ export default function AutoSlidingTestimonials() {
           Trusted by High-Performance Hiring Teams
         </h2>
 
-        {/* SLIDER */}
         <div
           className="relative flex items-center justify-center gap-6"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* LEFT CARD (DESKTOP ONLY) */}
           <div className="hidden sm:block">
             <TestimonialCard data={getCard(-1)} scale={0.9} opacity={0.4} />
           </div>
 
-          {/* CENTER CARD */}
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
               className="relative z-10 w-full flex justify-center"
             >
-              <TestimonialCard data={getCard(0)} highlight />
+              <TestimonialCard
+                data={getCard(0)}
+                highlight
+                animateStars
+                starsKey={index}
+              />
             </motion.div>
           </AnimatePresence>
 
-          {/* RIGHT CARD (DESKTOP ONLY) */}
           <div className="hidden sm:block">
             <TestimonialCard data={getCard(1)} scale={0.9} opacity={0.4} />
           </div>
         </div>
 
-        {/* DOTS */}
         <div className="flex justify-center gap-2 mt-8">
           {testimonials.map((_, i) => (
             <button
               key={i}
+              type="button"
               onClick={() => setIndex(i)}
               className={`w-3 h-3 rounded-full transition ${
                 i === index ? "bg-indigo-600" : "bg-slate-300"
               }`}
+              aria-label={`Show review ${i + 1}`}
             />
           ))}
         </div>
@@ -104,8 +149,14 @@ export default function AutoSlidingTestimonials() {
   );
 }
 
-/* TESTIMONIAL CARD */
-function TestimonialCard({ data, highlight, scale = 1, opacity = 1 }) {
+function TestimonialCard({
+  data,
+  highlight,
+  scale = 1,
+  opacity = 1,
+  animateStars = false,
+  starsKey = 0,
+}) {
   return (
     <motion.div
       style={{ scale, opacity }}
@@ -114,7 +165,6 @@ function TestimonialCard({ data, highlight, scale = 1, opacity = 1 }) {
         ${highlight ? "ring-2 ring-indigo-500 shadow-indigo-200" : ""}
       `}
     >
-      {/* HEADER */}
       <div className="flex items-center gap-4 mb-4">
         <img
           src={data.image}
@@ -122,32 +172,19 @@ function TestimonialCard({ data, highlight, scale = 1, opacity = 1 }) {
           className="w-12 h-12 rounded-full ring-2 ring-indigo-500 shrink-0"
         />
         <div className="text-left">
-          <p className="font-bold text-slate-900 leading-tight">
-            {data.name}
-          </p>
-          <p className="text-sm text-slate-600 leading-tight">
-            {data.role}
-          </p>
+          <p className="font-bold text-slate-900 leading-tight">{data.name}</p>
+          <p className="text-sm text-slate-600 leading-tight">{data.role}</p>
           <p className="text-sm font-semibold text-indigo-600 leading-tight">
             {data.company}
           </p>
         </div>
       </div>
 
-      {/* QUOTE */}
-      <p className="text-slate-700 leading-relaxed text-sm sm:text-base">
+      <p className="text-slate-700 leading-relaxed text-sm sm:text-base text-left">
         “{data.quote}”
       </p>
 
-      {/* STARS */}
-      <div className="flex gap-1 mt-4">
-        {[...Array(5)].map((_, i) => (
-          <i
-            key={i}
-            className="fa-solid fa-star text-yellow-400 text-sm"
-          />
-        ))}
-      </div>
+      <AnimatedStars resetKey={starsKey} animate={animateStars} />
     </motion.div>
   );
 }

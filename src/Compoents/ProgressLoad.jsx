@@ -1,93 +1,98 @@
 import React, { useEffect, useRef, useState } from "react";
 
+const TOTAL = 20;
+const SLOTS_LEFT = 7;
+const CLAIMED = TOTAL - SLOTS_LEFT; // 13
+
 export default function ProgressLoad() {
-  const TOTAL = 20;
-
-  // Animated disappear boxes (11th–13th)
-  const ANIMATE_INDEXES = [11, 12, 13];
-
-  // Static completed boxes (14th–20th)
-  const STATIC_COMPLETED_START = 14;
-
-  const [activeStep, setActiveStep] = useState(-1);
+  const [filled, setFilled] = useState(0);
+  const [done, setDone] = useState(false);
   const containerRef = useRef(null);
   const startedRef = useRef(false);
 
-  /* ================================
-     START ANIMATION ON SCROLL
-  ================================= */
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !startedRef.current) {
-          startedRef.current = true;
+        if (!entry.isIntersecting || startedRef.current) return;
+        startedRef.current = true;
 
-          let step = 0;
-          const interval = setInterval(() => {
-            setActiveStep(step);
-            step++;
-
-            if (step === ANIMATE_INDEXES.length) {
-              clearInterval(interval);
-            }
-          }, 350);
-        }
+        let i = 0;
+        const tick = () => {
+          i += 1;
+          setFilled(i);
+          if (i < CLAIMED) {
+            setTimeout(tick, i < 8 ? 100 : 75);
+          } else {
+            setDone(true);
+          }
+        };
+        setTimeout(tick, 250);
       },
       { threshold: 0.4 }
     );
 
-    if (containerRef.current) observer.observe(containerRef.current);
+    observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  const left = TOTAL - filled;
 
   return (
     <div
       ref={containerRef}
-      className="w-full py-4 flex justify-center bg-transparent"
+      className="w-full py-3 sm:py-4 flex flex-col items-center gap-2.5 bg-transparent"
     >
-      <div className="flex gap-[4px] sm:gap-[6px] md:gap-2">
+      <div
+        className="flex items-end gap-[3px] sm:gap-1.5 md:gap-2"
+        role="img"
+        aria-label={`${filled} of ${TOTAL} slots claimed, ${left} left`}
+      >
         {Array.from({ length: TOTAL }).map((_, i) => {
-          const animatedIndex = ANIMATE_INDEXES[activeStep];
-          const isAnimatedActive = i === animatedIndex;
-          const isStaticCompleted = i >= STATIC_COMPLETED_START;
-
-          const bgClass =
-            isAnimatedActive || isStaticCompleted
-              ? "bg-[#385beb]"
-              : "bg-[#4a4a4a]";
-
-          const showTick = isAnimatedActive || isStaticCompleted;
+          const isClaimed = i < filled;
+          const isOpenSlot = i >= CLAIMED;
+          const justFilled = i === filled - 1 && filled > 0 && !done;
 
           return (
             <div
               key={i}
               className={`
-                h-4 w-2 sm:h-7 sm:w-4
-                rounded-sm
-                flex items-center justify-center
-                transition-colors duration-300
-                ${bgClass}
+                relative
+                h-4 w-2 sm:h-7 sm:w-3.5 md:w-4
+                rounded-[3px] sm:rounded-sm
+                transition-all duration-200 ease-out
+                ${justFilled ? "scale-y-110" : "scale-y-100"}
+                ${
+                  isClaimed
+                    ? "bg-indigo-600"
+                    : isOpenSlot
+                      ? done
+                        ? "bg-red-500/90"
+                        : "bg-slate-300"
+                      : "bg-slate-300"
+                }
               `}
             >
-              {showTick && (
-                <svg
-                  className="w-3 h-3 sm:w-4 sm:h-4 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+              {/* thin underline for the open ones when done */}
+              {isOpenSlot && done && (
+                <span className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-red-500/70" />
               )}
             </div>
           );
         })}
       </div>
+
+      <p
+        className={`text-xs sm:text-sm font-semibold transition-colors duration-300 ${
+          done ? "text-red-600" : "text-slate-500"
+        }`}
+      >
+        {done
+          ? `Only ${SLOTS_LEFT} slots left this week`
+          : `${left} slots remaining…`}
+      </p>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import React from "react";
 import ProgressLoad from "./ProgressLoad";
+import UrgencyLine from "./UrgencyLine";
+
 const features = [
   {
     title: "AI-Generated Job Descriptions",
@@ -8,19 +10,19 @@ const features = [
     bg: "bg-[#e3effe]",
     iconColor: "text-blue-600",
   },
-{
-  title: "Multi-Layer AI Screening System",
-  desc: (
-    <>
-      <span className="font-bold text-black">Resume Intelligence</span> <br />
-      <span className="font-bold text-black">AI Phone Interviews</span> <br />
-      <span className="font-bold text-black">AI Video Interviews</span>
-    </>
-  ),
-  icon: "fa-solid fa-magnifying-glass-plus",
-  bg: "bg-[#e5fced]",
-  iconColor: "text-green-600",
-},
+  {
+    title: "Multi-Layer AI Screening System",
+    desc: (
+      <>
+        <span className="font-bold text-black">Resume Intelligence</span> <br />
+        <span className="font-bold text-black">AI Phone Interviews</span> <br />
+        <span className="font-bold text-black">AI Video Interviews</span>
+      </>
+    ),
+    icon: "fa-solid fa-magnifying-glass-plus",
+    bg: "bg-[#e5fced]",
+    iconColor: "text-green-600",
+  },
   {
     title: "Multilingual AI Interviews",
     desc: "Conduct interviews in 20+ languages and 5 English accents for inclusive, global hiring.",
@@ -67,103 +69,88 @@ const features = [
 
 const HiringFeatures = () => {
   return (
-    <section className="max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-      {/* Heading */}
-      <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 sm:mb-16 leading-tight">
+    <section className="max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 overflow-x-hidden">
+      <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 sm:mb-16 leading-tight px-1">
         Everything You Need to Screen, Interview, and Shortlist -Built In
       </h2>
 
-      {/* Features Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
         {features.map((item, index) => (
           <div
             key={index}
-            className={`group rounded-2xl p-6 sm:p-7 ${item.bg}
+            className={`group relative rounded-2xl p-6 sm:p-7 ${item.bg}
               transition-all duration-300
               hover:-translate-y-1 hover:shadow-xl`}
           >
-            {/* Icon */}
+            <span className="absolute top-4 right-4 text-[11px] font-bold text-indigo-400/80 tabular-nums">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white flex items-center justify-center shadow-sm mb-4">
               <i
                 className={`${item.icon} ${item.iconColor} text-xl sm:text-2xl`}
               />
             </div>
 
-            {/* Content */}
-            <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">
+            <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2 pr-6">
               {item.title}
             </h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              {item.desc}
-            </p>
+            <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
           </div>
         ))}
       </div>
 
-           {/* CTA */}
-        <div className="mt-14 flex flex-col items-center text-center gap-3 sm:gap-2">
-
-  {/* CTA Button */}
-  <button
-    onClick={() => {
-      document.getElementById("contact")?.scrollIntoView({
-        behavior: "smooth",
-      });
-    }}
-    className="group relative inline-flex items-center justify-center
+      <div className="mt-14 flex flex-col items-center text-center gap-3 sm:gap-2 px-1">
+        <button
+          onClick={() => {
+            document.getElementById("contact")?.scrollIntoView({
+              behavior: "smooth",
+            });
+          }}
+          className="group relative inline-flex items-center justify-center
       rounded-xl
-      px-6 sm:px-10 py-3 sm:py-4
-      text-sm sm:text-3xl
-      font-semibold text-white
+      px-5 sm:px-10 py-3.5 sm:py-4
+      text-sm sm:text-2xl lg:text-3xl
+      font-semibold text-white text-center
       bg-gradient-to-r
       from-[rgb(50_94_235)]
       to-[rgb(140_54_234)]
       shadow-lg shadow-[rgb(50_94_235)/30]
       transition-all duration-300
-      hover:scale-[1.04]
+      hover:scale-[1.02]
       hover:shadow-xl
       active:scale-[0.97]
-      overflow-hidden leading-none"
-  >
-    {/* Shine Sweep */}
-    <span
-      className="absolute inset-y-0 -left-[45%] w-[45%]
+      overflow-hidden leading-snug
+      w-full max-w-xl sm:max-w-3xl"
+        >
+          <span
+            className="absolute inset-y-0 -left-[45%] w-[45%]
         bg-white/50 z-0
         transition-all duration-[1000ms] ease-[cubic-bezier(0.4,0,0.2,1)]
         [clip-path:polygon(0%_0%,55%_0%,100%_100%,25%_100%)]
         group-hover:left-full
         group-hover:opacity-0"
-    />
-
-    {/* Soft Glow Overlay */}
-    <span
-      className="absolute inset-0 bg-white/5
+          />
+          <span
+            className="absolute inset-0 bg-white/5
         opacity-0 group-hover:opacity-100
         transition-opacity duration-500"
-    />
+          />
+          <span className="relative z-10 px-1">
+            Book a Free Hiring Workflow Review
+          </span>
+        </button>
 
-    {/* Button Text */}
-    <span className="relative z-10 whitespace-nowrap">
-      Book a Free Hiring Workflow Review
-    </span>
-  </button>
+        <p className="font-semibold text-xs sm:text-base text-slate-700">
+          Roles close faster when you move first.
+        </p>
 
-  {/* Sub Text */}
-  <p className="text-lackfont-semibold text-xs sm:text-base">
-    ⚠️ Roles close faster when you move first.
-  </p>
+        <div className="w-full max-w-xs">
+          <ProgressLoad />
+        </div>
 
-  {/* Progress */}
-  <div className="w-full max-w-xs">
-    <ProgressLoad />
-  </div>
-
-  {/* Urgency */}
-  <p className="text-red-600 font-semibold tracking-wide ">
-    🚨 HURRY! Only 7 slots left this week.
-  </p>
-
-</div>
+        <UrgencyLine />
+      </div>
     </section>
   );
 };

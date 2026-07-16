@@ -59,7 +59,7 @@ export default function IntegrationsBar() {
                 <img
                   src={logo.src}
                   alt={logo.name}
-                  className="h-8 sm:h-12 object-contain"
+                  className="h-8 sm:h-12 object-contain grayscale contrast-125 brightness-90 opacity-80"
                 />
               </div>
             ))}
@@ -67,15 +67,10 @@ export default function IntegrationsBar() {
         </div>
       </div>
 
-      {/* CUSTOM ANIMATION */}
-      <style jsx>{`
+      <style>{`
         @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
         .animate-marquee {
           animation: marquee 28s linear infinite;

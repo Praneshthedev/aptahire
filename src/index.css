@@ -42,3 +42,29 @@ button {
 .animate-right-left {
   animation: float-right-left 3s ease-in-out infinite;
 }
+
+@keyframes header-warning-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.header-warning-icon {
+  animation: header-warning-soft 2.2s ease-in-out infinite;
+}
+
+@keyframes urgency-icon-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.35));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.85));
+  }
+}
+
+.urgency-icon {
+  animation: urgency-icon-glow 1.6s ease-in-out infinite;
+}

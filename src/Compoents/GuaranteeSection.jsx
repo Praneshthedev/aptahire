@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import guaranteeBadge from "../assets/Money-back.png";
 import ProgressLoad from "./ProgressLoad";
+import UrgencyLine from "./UrgencyLine";
 /* 🔢 Counter Hook */
 const useCountUp = (end, duration = 1200) => {
   const [count, setCount] = useState(0);
@@ -187,9 +188,7 @@ export default function GuaranteeSection({ variant = "light" }) {
           </p>
 
           <ProgressLoad />
-          <p className="text-red-600 font-semibold tracking-wide ">
-    🚨 HURRY! Only 7 slots left this week.
-  </p>
+          <UrgencyLine />
 
 
         </div>

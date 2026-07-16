@@ -1,5 +1,6 @@
 import React from "react";
 import ProgressLoad from "./ProgressLoad";
+import UrgencyLine from "./UrgencyLine";
 
 const AIHiringPartnerSection = () => {
   return (
@@ -16,8 +17,13 @@ const AIHiringPartnerSection = () => {
         <div className="rounded-3xl bg-white/70 backdrop-blur-xl shadow-2xl border border-white/40 px-2 sm:px-12 py-14 text-center">
 
           {/* EYEBROW */}
-          <p className="inline-block mb-4 sm:px-4 px-0 py-1 rounded-full text-sm font-semibold
-                         bg-[#325eeb]/10 text-[#325eeb]">
+          <p
+            className="inline-flex max-w-[calc(100%-0.5rem)] sm:max-w-none
+              mb-4 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full
+              text-[11px] leading-snug sm:text-sm font-semibold
+              bg-[#325eeb]/10 text-[#325eeb]
+              text-center mx-auto"
+          >
             Trusted by High-Volume Hiring Agencies
           </p>
 
@@ -102,17 +108,19 @@ const AIHiringPartnerSection = () => {
 
   {/* Top Info */}
   <p className="sm:text-base text-xs text-black flex items-center gap-2 font-medium">
-    <span className="animate-pulse">🔥</span>
+    <img
+      src="/image/fire.gif"
+      alt=""
+      className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 object-contain"
+      aria-hidden="true"
+    />
     <span>Agencies ahead of you deployed this already.</span>
   </p>
 
   {/* Progress */}
   <ProgressLoad />
 
-  {/* Bottom Info */}
- <p className="text-red-600 font-semibold">
-    🚨 HURRY! Only 7 slots left this week.
-  </p>
+  <UrgencyLine />
 
 </div>
       </div>

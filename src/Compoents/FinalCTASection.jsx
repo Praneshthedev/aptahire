@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import UrgencyLine from "./UrgencyLine";
 
 const PHP_ENDPOINT = "https://getnos.io/Aptahire/Main.php";
 const REDIRECT_URL = "https://cal.com/rakeshr7/strategy-call";
@@ -192,9 +193,7 @@ export default function FinalCTASection() {
                   : "Grab your slot now - it won't last long."}
               </button>
 
-              <p className="text-red-600 font-semibold tracking-wide text-center">
-                HURRY! Only 7 slots left this week.
-              </p>
+              <UrgencyLine className="text-center w-full" />
             </form>
           </div>
         </div>
