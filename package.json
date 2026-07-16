@@ -9,7 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "homepage": "https://connect.aptahire.ai/ai-driven-hiring-platform/",
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
