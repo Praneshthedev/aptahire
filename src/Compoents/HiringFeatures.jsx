@@ -1,6 +1,8 @@
 import React from "react";
+import { motion } from "framer-motion";
 import ProgressLoad from "./ProgressLoad";
 import UrgencyLine from "./UrgencyLine";
+import dashboardImage from "../assets/Main.png";
 
 const features = [
   {
@@ -70,6 +72,28 @@ const features = [
 const HiringFeatures = () => {
   return (
     <section className="max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 overflow-x-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.25 }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-10 sm:mb-14 flex justify-center"
+      >
+        <div className="relative w-full max-w-6xl px-1 sm:px-2">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-2 sm:-inset-3 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#365cea]/15 via-[#8938ea]/20 to-[#365cea]/15 blur-md"
+          />
+          <img
+            src={dashboardImage}
+            alt="Aptahire hiring dashboard"
+            className="relative w-full h-auto rounded-xl sm:rounded-2xl shadow-2xl ring-1 ring-slate-200/90"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </motion.div>
+
       <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 sm:mb-16 leading-tight px-1">
         Everything You Need to Screen, Interview, and Shortlist -Built In
       </h2>

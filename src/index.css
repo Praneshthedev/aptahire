@@ -147,12 +147,6 @@ button {
   -webkit-overflow-scrolling: touch;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .hero-wistia-scroll-shield {
-    cursor: pointer;
-  }
-}
-
 wistia-player[media-id="8gosrmsfk3"]:not(:defined) {
   background: center / cover no-repeat
     url("https://fast.wistia.com/embed/medias/8gosrmsfk3/swatch");
