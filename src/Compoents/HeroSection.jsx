@@ -3,8 +3,24 @@ import { motion } from "framer-motion";
 import logo from "../assets/aptahire-logo-white.png";
 import ProgressLoad from "./ProgressLoad";
 
-/* ✅ Import Hero Image */
-import heroImage from "../assets/Main.png";
+const WISTIA_MEDIA_ID = "8gosrmsfk3";
+
+function loadWistiaScripts() {
+  if (document.querySelector('script[data-wistia-player]')) return;
+
+  const player = document.createElement("script");
+  player.src = "https://fast.wistia.com/player.js";
+  player.async = true;
+  player.dataset.wistiaPlayer = "true";
+  document.head.appendChild(player);
+
+  const embed = document.createElement("script");
+  embed.src = `https://fast.wistia.com/embed/${WISTIA_MEDIA_ID}.js`;
+  embed.async = true;
+  embed.type = "module";
+  embed.dataset.wistiaPlayer = "true";
+  document.head.appendChild(embed);
+}
 
 /* ================= STAT CARD (COUNT FROM 1) ================= */
 const StatCard = ({ value, label, start }) => {
@@ -47,22 +63,97 @@ const StatCard = ({ value, label, start }) => {
   );
 };
 
-/* ================= HERO IMAGE ================= */
+/* ================= HERO WISTIA VIDEO ================= */
 function HeroPreviewImage({ isPopupOpen = false }) {
+  const wrapRef = useRef(null);
+  const [interactive, setInteractive] = useState(false);
+
+  useEffect(() => {
+    loadWistiaScripts();
+  }, []);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap || interactive) return;
+
+    const onWheel = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      window.scrollBy({ top: e.deltaY, left: 0, behavior: "auto" });
+    };
+
+    wrap.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    return () => wrap.removeEventListener("wheel", onWheel, { capture: true });
+  }, [interactive]);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const player = wrap?.querySelector("wistia-player");
+    if (!player) return;
+
+    const clampPlayer = () => {
+      player.style.setProperty("position", "absolute", "important");
+      player.style.setProperty("inset", "0", "important");
+      player.style.setProperty("width", "100%", "important");
+      player.style.setProperty("height", "100%", "important");
+      player.style.setProperty("max-height", "100%", "important");
+      player.style.setProperty("padding", "0", "important");
+      player.style.setProperty("margin", "0", "important");
+    };
+
+    clampPlayer();
+    const observer = new MutationObserver(clampPlayer);
+    observer.observe(player, { attributes: true, childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!interactive) return;
+
+    const onDocPointerDown = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) {
+        setInteractive(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", onDocPointerDown);
+    return () => document.removeEventListener("pointerdown", onDocPointerDown);
+  }, [interactive]);
+
   return (
     <motion.div
       variants={heroItem}
-      className={`relative z-40 w-[92%] sm:w-[70%] md:w-[55%]
-        -mb-6 sm:-mb-8 md:-mb-10
-        ${isPopupOpen ? "pointer-events-none opacity-0" : ""}`}
+      className={`relative w-[92%] sm:w-[70%] md:w-[55%] mb-6 sm:mb-8 md:mb-10 ${
+        isPopupOpen ? "pointer-events-none opacity-0" : ""
+      }`}
     >
-      <img
-        src={heroImage}
-        alt="Aptahire product preview"
-        className="w-full h-auto block rounded-2xl shadow-2xl"
-        loading="eager"
-        decoding="async"
-      />
+      <div
+        ref={wrapRef}
+        className={`hero-wistia-wrap shadow-2xl bg-black/10 ${
+          interactive ? "hero-wistia-wrap--interactive" : ""
+        }`}
+      >
+        <wistia-player
+          media-id={WISTIA_MEDIA_ID}
+          aspect="1.7777777777777777"
+        />
+        {!interactive && (
+          <div
+            className="hero-wistia-scroll-shield"
+            onClick={() => setInteractive(true)}
+            aria-label="Click to interact with video"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setInteractive(true);
+              }
+            }}
+          />
+        )}
+      </div>
     </motion.div>
   );
 }
@@ -181,7 +272,7 @@ export default function HeroWithVideo({ isPopupOpen = false }) {
     <>
       {/* ================= HERO ================= */}
       <section
-        className="relative flex flex-col items-center overflow-x-hidden pb-0
+        className="relative flex flex-col items-center overflow-hidden pb-6 sm:pb-8
         bg-gradient-to-b from-[#365cea] via-[#8938ea] to-white"
       >
         <motion.div
@@ -254,7 +345,7 @@ export default function HeroWithVideo({ isPopupOpen = false }) {
       </section>
 
       {/* ================= STATS + CTA ================= */}
-      <section className="bg-white pt-12 sm:pt-14 md:pt-16 pb-14 sm:pb-20 text-center px-4">
+      <section className="relative z-10 bg-white pt-6 sm:pt-8 md:pt-10 pb-14 sm:pb-20 text-center px-4">
         <div
           ref={statsRef}
           className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto"

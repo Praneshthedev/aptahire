@@ -107,3 +107,54 @@ button {
 
 .fire-spark.s2 { animation-delay: -0.2s; }
 .fire-spark.s3 { animation-delay: -0.4s; }
+
+/* Wistia hero video */
+.hero-wistia-wrap {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  border-radius: 1rem;
+  isolation: isolate;
+  contain: layout paint;
+}
+
+.hero-wistia-wrap wistia-player {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none;
+  overflow: hidden !important;
+}
+
+.hero-wistia-wrap--interactive wistia-player {
+  pointer-events: auto;
+}
+
+.hero-wistia-scroll-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-wistia-scroll-shield {
+    cursor: pointer;
+  }
+}
+
+wistia-player[media-id="8gosrmsfk3"]:not(:defined) {
+  background: center / cover no-repeat
+    url("https://fast.wistia.com/embed/medias/8gosrmsfk3/swatch");
+  filter: blur(5px);
+}
