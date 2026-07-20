@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-api.mjs",
+    "deploy:zip": "npm run build && node scripts/package-deploy.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

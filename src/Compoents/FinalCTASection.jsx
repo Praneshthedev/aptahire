@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import UrgencyLine from "./UrgencyLine";
 
 const LEAD_API_URL =
-  import.meta.env.VITE_LEAD_API_URL ?? "https://getnos.io/Aptahire/lead.php";
+  import.meta.env.VITE_LEAD_API_URL ??
+  "https://connect.aptahire.ai/recruiters/api/lead.php";
 const BOOKING_REDIRECT_URL =
   import.meta.env.VITE_BOOKING_REDIRECT_URL ??
   "https://cal.com/rakeshr7/strategy-call";

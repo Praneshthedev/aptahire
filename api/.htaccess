@@ -1,0 +1,15 @@
+<Files "aptahire_leads.csv">
+  Require all denied
+</Files>
+
+<Files "mail.log">
+  Require all denied
+</Files>
+
+<Files "config.php">
+  Require all denied
+</Files>
+
+<FilesMatch "^(config\.example\.php|send-lead-mail\.php)$">
+  Require all denied
+</FilesMatch>

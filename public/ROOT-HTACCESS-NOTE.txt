@@ -1,0 +1,9 @@
+Add these lines to your ROOT .htaccess file (html/.htaccess)
+ABOVE the "# BEGIN WordPress" block if /recruiters/ still returns 404:
+
+# BEGIN Aptahire Recruiters
+RewriteRule ^recruiters/?$ /recruiters/index.html [L]
+# END Aptahire Recruiters
+
+Also upload the new index.php file from the build into html/recruiters/
+That alone usually fixes the 404 on WordPress/LiteSpeed hosts.

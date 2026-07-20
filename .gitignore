@@ -10,10 +10,15 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+deploy-staging
+recruiters-deploy.zip
 *.local
 .env
 .env.*
 !.env.example
+api/config.php
+api/mail.log
+api/aptahire_leads.csv
 
 # Editor directories and files
 .vscode/*
