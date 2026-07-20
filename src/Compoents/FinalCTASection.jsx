@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import UrgencyLine from "./UrgencyLine";
 
-const PHP_ENDPOINT = "https://getnos.io/Aptahire/Main.php";
-const REDIRECT_URL = "https://cal.com/rakeshr7/strategy-call";
-const IFRAME_NAME = "aptahire-final-cta-submit";
+const LEAD_API_URL =
+  import.meta.env.VITE_LEAD_API_URL ?? "https://getnos.io/Aptahire/lead.php";
+const BOOKING_REDIRECT_URL =
+  import.meta.env.VITE_BOOKING_REDIRECT_URL ??
+  "https://cal.com/rakeshr7/strategy-call";
 
 const initialFormData = {
   name: "",
@@ -13,45 +15,86 @@ const initialFormData = {
   bottleneck: "",
 };
 
+const PHONE_PATTERN = /^[6-9]\d{9}$/;
+
+function normalizePhone(value) {
+  return value.replace(/\D/g, "").slice(0, 10);
+}
+
 export default function FinalCTASection() {
   const [ctaFormData, setCtaFormData] = useState(initialFormData);
   const [ctaSubmitting, setCtaSubmitting] = useState(false);
   const [ctaMessage, setCtaMessage] = useState("");
-  const hasSubmittedRef = useRef(false);
+  const [ctaMessageType, setCtaMessageType] = useState("info");
 
   const handleCtaChange = (e) => {
     const { name, value } = e.target;
-    setCtaFormData((prev) => ({ ...prev, [name]: value }));
+    setCtaFormData((prev) => ({
+      ...prev,
+      [name]: name === "phone" ? normalizePhone(value) : value,
+    }));
   };
 
-  const handleCtaSubmit = () => {
-    hasSubmittedRef.current = true;
-    setCtaSubmitting(true);
-    setCtaMessage("Submitting your details...");
-  };
+  const handleCtaSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleIframeLoad = () => {
-    if (!hasSubmittedRef.current) {
+    const phone = normalizePhone(ctaFormData.phone);
+    if (!PHONE_PATTERN.test(phone)) {
+      setCtaMessageType("error");
+      setCtaMessage("Enter a valid 10-digit phone number.");
       return;
     }
 
-    setCtaMessage("Thanks! Redirecting you to the booking page...");
-    setCtaFormData(initialFormData);
+    setCtaSubmitting(true);
+    setCtaMessageType("info");
+    setCtaMessage("Submitting your details...");
 
-    window.setTimeout(() => {
-      window.location.href = REDIRECT_URL;
-    }, 400);
+    try {
+      const payload = new FormData();
+      payload.append("name", ctaFormData.name.trim());
+      payload.append("email", ctaFormData.email.trim());
+      payload.append("phone", phone);
+      payload.append("company", ctaFormData.company.trim());
+      payload.append("bottleneck", ctaFormData.bottleneck);
+
+      const response = await fetch(LEAD_API_URL, {
+        method: "POST",
+        body: payload,
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || "Unable to submit right now.");
+      }
+
+      setCtaMessageType("success");
+      setCtaMessage("Thanks! Redirecting you to the booking page...");
+      setCtaFormData(initialFormData);
+
+      window.setTimeout(() => {
+        window.location.href = data.redirect || BOOKING_REDIRECT_URL;
+      }, 400);
+    } catch (error) {
+      setCtaMessageType("error");
+      setCtaMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to submit right now. Please try again."
+      );
+      setCtaSubmitting(false);
+    }
   };
+
+  const messageStyles =
+    ctaMessageType === "success"
+      ? "bg-green-100 text-green-800"
+      : ctaMessageType === "error"
+        ? "bg-red-100 text-red-800"
+        : "bg-indigo-100 text-indigo-800";
 
   return (
     <section id="contact" className="py-16 sm:py-20 bg-white">
-      <iframe
-        title="Final CTA Submit"
-        name={IFRAME_NAME}
-        onLoad={handleIframeLoad}
-        className="hidden"
-      />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
           <div className="flex flex-col justify-center">
@@ -90,79 +133,107 @@ export default function FinalCTASection() {
 
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
             {ctaMessage && (
-              <div className="mb-4 p-3 rounded-lg text-center font-medium bg-green-100 text-green-800">
+              <div
+                className={`mb-4 p-3 rounded-lg text-center font-medium ${messageStyles}`}
+              >
                 {ctaMessage}
               </div>
             )}
 
             <form
-              action={PHP_ENDPOINT}
-              method="POST"
-              target={IFRAME_NAME}
               onSubmit={handleCtaSubmit}
               className="space-y-4 sm:space-y-6"
+              noValidate
             >
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+                <label
+                  htmlFor="cta-name"
+                  className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2"
+                >
                   Name *
                 </label>
                 <input
+                  id="cta-name"
                   type="text"
                   name="name"
                   value={ctaFormData.name}
                   onChange={handleCtaChange}
                   required
+                  autoComplete="name"
                   className="w-full rounded-lg border border-slate-300 px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm sm:text-base"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+                <label
+                  htmlFor="cta-email"
+                  className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2"
+                >
                   Work Email *
                 </label>
                 <input
+                  id="cta-email"
                   type="email"
                   name="email"
                   value={ctaFormData.email}
                   onChange={handleCtaChange}
                   required
+                  autoComplete="email"
                   className="w-full rounded-lg border border-slate-300 px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm sm:text-base"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+                <label
+                  htmlFor="cta-phone"
+                  className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2"
+                >
                   Phone *
                 </label>
                 <input
+                  id="cta-phone"
                   type="tel"
                   name="phone"
                   value={ctaFormData.phone}
                   onChange={handleCtaChange}
                   required
+                  inputMode="numeric"
+                  autoComplete="tel"
+                  placeholder="10-digit mobile number"
+                  maxLength={10}
+                  pattern="[6-9][0-9]{9}"
                   className="w-full rounded-lg border border-slate-300 px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm sm:text-base"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+                <label
+                  htmlFor="cta-company"
+                  className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2"
+                >
                   Company / Role *
                 </label>
                 <input
+                  id="cta-company"
                   type="text"
                   name="company"
                   value={ctaFormData.company}
                   onChange={handleCtaChange}
                   required
+                  autoComplete="organization"
                   className="w-full rounded-lg border border-slate-300 px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm sm:text-base"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+                <label
+                  htmlFor="cta-bottleneck"
+                  className="block text-sm font-semibold text-slate-700 mb-1 sm:mb-2"
+                >
                   Biggest hiring bottleneck *
                 </label>
                 <select
+                  id="cta-bottleneck"
                   name="bottleneck"
                   value={ctaFormData.bottleneck}
                   onChange={handleCtaChange}
