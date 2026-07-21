@@ -13,8 +13,8 @@ function loadMailConfig(): array
 {
     $config = [
         "lead_email" => "sriethiraj@getnos.io",
-        "mail_from" => "noreply@connect.aptahire.ai",
-        "mail_from_name" => "Aptahire",
+        "mail_from" => "hello@getnos.io",
+        "mail_from_name" => "GetNos",
         "booking_redirect_url" => "https://cal.com/rakeshr7/strategy-call",
     ];
 
@@ -106,18 +106,23 @@ function sendLeadMailMessage(
     string $subject,
     string $body
 ): array {
-    $attempts = [
-        sendViaLocalhostRelay($config, $replyTo, $subject, $body),
-        sendViaPhpMail($config, $replyTo, $subject, $body),
+    $senders = [
+        "sendViaLocalhostRelay",
+        "sendViaPhpMail",
     ];
 
-    foreach ($attempts as $result) {
+    $errors = [];
+
+    foreach ($senders as $sender) {
+        $result = $sender($config, $replyTo, $subject, $body);
+
         if ($result["sent"]) {
             logMailEvent("sent via " . $result["method"]);
             return $result;
         }
 
         if (!empty($result["error"])) {
+            $errors[] = $result["error"];
             logMailEvent($result["error"]);
         }
     }
@@ -125,6 +130,6 @@ function sendLeadMailMessage(
     return [
         "sent" => false,
         "method" => null,
-        "error" => implode(" | ", array_filter(array_column($attempts, "error"))) ?: "Mail failed",
+        "error" => implode(" | ", $errors) ?: "Mail failed",
     ];
 }

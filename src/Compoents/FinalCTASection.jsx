@@ -39,6 +39,8 @@ export default function FinalCTASection() {
   const handleCtaSubmit = async (e) => {
     e.preventDefault();
 
+    if (ctaSubmitting) return;
+
     const phone = normalizePhone(ctaFormData.phone);
     if (!PHONE_PATTERN.test(phone)) {
       setCtaMessageType("error");
