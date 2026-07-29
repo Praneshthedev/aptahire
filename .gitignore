@@ -17,6 +17,7 @@ recruiters-deploy.zip
 .env.*
 !.env.example
 api/config.php
+api/.env
 api/mail.log
 api/aptahire_leads.csv
 

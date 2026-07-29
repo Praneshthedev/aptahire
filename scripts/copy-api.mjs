@@ -16,8 +16,9 @@ cpSync(source, target, {
   recursive: true,
   filter: (src) => {
     const name = src.split(/[/\\]/).pop() ?? "";
-    return name !== "config.php" && name !== "mail.log" && name !== "aptahire_leads.csv";
+    // Keep .env so MAIL_PASS is available on the server after deploy
+    return name !== "mail.log" && name !== "aptahire_leads.csv";
   },
 });
 
-console.log("Copied api/ to dist/api/");
+console.log("Copied api/ to dist/api/ (includes .env for MAIL_PASS if present)");

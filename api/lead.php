@@ -8,6 +8,7 @@ $allowedOrigins = [
     "http://localhost:5173",
     "https://connect.aptahire.ai",
     "https://aptahire-one.vercel.app",
+    "https://caganeshoccult.com",
 ];
 
 $origin = $_SERVER["HTTP_ORIGIN"] ?? "";
