@@ -18,6 +18,7 @@ import FinalCTASection from "./Compoents/FinalCTASection";
 import Footer from "./Compoents/Footer";
 import AIHiringPartnerSection from "./Compoents/AIHiringPartnerSection";
 import StickyOfferFooter from "./Compoents/StickyOfferFooter";
+import LeadPopup from "./Compoents/LeadPopup";
 
 const App = () => {
   
@@ -40,6 +41,7 @@ const App = () => {
       <FinalCTASection />
        <Footer />
        <StickyOfferFooter />
+       <LeadPopup />
     </>
   );
 };

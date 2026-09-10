@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import stopwatch from "../assets/stopwatch.png";
+import { openLeadPopup } from "./LeadPopup";
 
 function BurstIcon({ className = "h-4 w-4" }) {
   return (
@@ -108,11 +109,7 @@ export default function StickyOfferFooter() {
 
             <div className="flex justify-center lg:justify-end">
               <button
-                onClick={() => {
-                  document.getElementById("contact")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                }}
+                onClick={() => openLeadPopup()}
                 className="
                   group relative isolate overflow-hidden
                   rounded-full px-6 sm:px-10 py-2 sm:py-4
